@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Itinerary Planner - TravelBuddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
+    
+    
+  <script type="module" crossorigin src="/assets/js/itinerary-d05b8ec1.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/js/styles-ae31c95d.js">
+  <link rel="modulepreload" crossorigin href="/assets/js/app-b66a2db2.js">
+  <link rel="stylesheet" href="/assets/styles/styles-044f38f8.css">
+  <link rel="stylesheet" href="/assets/styles/itinerary-ea60d446.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">TravelBuddy</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="itinerary.html">Itinerary</a></li>
+                <li><a href="attractions.html">Explore</a></li>
+                <li><a href="bookings.html">Bookings</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="itinerary-planner">
+            <h1>Trip Itinerary Planner</h1>
+            <div class="itinerary-container">
+                <div class="itinerary-sidebar">
+                    <button id="new-itinerary" class="primary-button">Create New Itinerary</button>
+                    <div class="saved-itineraries">
+                        <h3>Saved Itineraries</h3>
+                        <ul id="itinerary-list"></ul>
+                    </div>
+                </div>
+                <div class="itinerary-main">
+                    <div class="itinerary-header">
+                        <input type="text" id="trip-name" placeholder="Trip Name">
+                        <input type="date" id="trip-start">
+                        <input type="date" id="trip-end">
+                    </div>
+                    <div class="booking-options">
+                        <div class="flights-section">
+                            <h3>Flight Options</h3>
+                            <div class="flight-search">
+                                <div class="autocomplete-wrapper">
+                                    <input type="text" id="flight-from" placeholder="From (City or Airport)">
+                                    <div class="suggestions-container" id="from-suggestions"></div>
+                                    <input type="hidden" id="flight-from-code">
+                                </div>
+                                <div class="autocomplete-wrapper">
+                                    <input type="text" id="flight-to" placeholder="To (City or Airport)">
+                                    <div class="suggestions-container" id="to-suggestions"></div>
+                                    <input type="hidden" id="flight-to-code">
+                                </div>
+                                <button class="search-button" id="search-flights">Search Flights</button>
+                            </div>
+                            <div id="flight-results" class="results-container"></div>
+                        </div>
+                        
+                        <div class="hotels-section">
+                            <h3>Hotel Options</h3>
+                            <div class="hotel-search">
+                                <input type="text" id="hotel-city" placeholder="City">
+                                <select id="hotel-rating">
+                                    <option value="">Any Rating</option>
+                                    <option value="3">3+ Stars</option>
+                                    <option value="4">4+ Stars</option>
+                                    <option value="5">5 Stars</option>
+                                </select>
+                                <button class="search-button" id="search-hotels">Search Hotels</button>
+                            </div>
+                            <div id="hotel-results" class="results-container"></div>
+                        </div>
+                    </div>
+                    <div class="itinerary-days" id="itinerary-days"></div>
+                    <button id="share-itinerary" class="secondary-button">Share Itinerary</button>
+                    <button id="save-itinerary" class="primary-button">Save Itinerary</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Same footer as index.html -->
+    </footer>
+    
+</body>
+</html> 

@@ -1,0 +1,33 @@
+.attractions-explorer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.map-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    height: 600px;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#attractions-list {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+} 

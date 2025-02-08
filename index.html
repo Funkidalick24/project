@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBuddy - Your Perfect Travel Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">TravelBuddy</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="itinerary.html">Itinerary</a></li>
+                <li><a href="#explore">Explore</a></li>
+                <li><a href="#bookings">Bookings</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <picture class="hero-background">
+                <source srcset="assets/images/hero.webp" type="image/webp">
+                <source srcset="assets/images/hero.jpg" type="image/jpeg">
+                <img src="assets/images/hero.jpg" alt="Travel destination background" class="hero-image">
+            </picture>
+            <div class="hero-content">
+                <h1>Plan Your Perfect Journey</h1>
+
+                <p>Discover amazing destinations and create unforgettable memories</p>
+                <button class="cta-button">Start Planning</button>
+            </div>
+        </section>
+
+        <section class="top-attractions">
+            <h2>Top-Rated Attractions</h2>
+            <div class="attractions-grid" id="attractions-container">
+                <div class="loading">Loading top attractions...</div>
+            </div>
+        </section>
+
+        <section id="currency-converter" class="converter-section">
+            <h2>Currency Converter</h2>
+            <div class="converter-widget">
+                <input type="number" id="amount" placeholder="Amount">
+                <select id="from-currency"></select>
+                <select id="to-currency"></select>
+                <button id="convert-btn">Convert</button>
+                <div id="result"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>Your trusted travel companion for creating memorable experiences.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html> 

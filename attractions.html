@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Attractions - TravelBuddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="attractions.css">
+</head>
+<body>
+    <header>
+        <!-- Same navbar as other pages -->
+    </header>
+
+    <main>
+        <section class="attractions-explorer">
+            <h1>Explore Nearby Attractions</h1>
+            <div class="search-container">
+                <input type="text" id="location-search" placeholder="Enter a location">
+                <select id="attraction-type">
+                    <option value="all">All Attractions</option>
+                    <option value="restaurant">Restaurants</option>
+                    <option value="landmark">Landmarks</option>
+                    <option value="museum">Museums</option>
+                </select>
+                <button id="search-btn" class="primary-button">Search</button>
+            </div>
+            <div class="map-container">
+                <div id="map"></div>
+                <div id="attractions-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Same footer as index.html -->
+    </footer>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script src="attractions.js"></script>
+</body>
+</html> 

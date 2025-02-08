@@ -1,0 +1,26 @@
+{
+  "name": "travelbuddy",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "preview": "vite preview",
+    "serve": "vite serve",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "start": "vite"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "eslint": "^8.53.0",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "terser": "^5.38.1",
+    "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0"
+  }
+}

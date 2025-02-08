@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels & Flights - TravelBuddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bookings.css">
+</head>
+<body>
+    <header>
+        <!-- Same navbar as other pages -->
+    </header>
+
+    <main>
+        <section class="bookings-section">
+            <div class="booking-tabs">
+                <button class="tab-button active" data-tab="hotels">Hotels</button>
+                <button class="tab-button" data-tab="flights">Flights</button>
+            </div>
+
+            <div class="tab-content" id="hotels">
+                <div class="search-filters">
+                    <input type="text" placeholder="Destination">
+                    <input type="date" placeholder="Check-in">
+                    <input type="date" placeholder="Check-out">
+                    <select id="price-range">
+                        <option value="">Price Range</option>
+                        <!-- Add options -->
+                    </select>
+                    <select id="amenities">
+                        <option value="">Amenities</option>
+                        <!-- Add options -->
+                    </select>
+                    <button class="search-button">Search Hotels</button>
+                </div>
+                <div id="hotels-results" class="results-grid"></div>
+            </div>
+
+            <div class="tab-content hidden" id="flights">
+                <div class="search-filters">
+                    <input type="text" placeholder="From">
+                    <input type="text" placeholder="To">
+                    <input type="date" placeholder="Departure">
+                    <input type="date" placeholder="Return">
+                    <select id="cabin-class">
+                        <option value="">Cabin Class</option>
+                        <!-- Add options -->
+                    </select>
+                    <button class="search-button">Search Flights</button>
+                </div>
+                <div id="flights-results" class="results-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Same footer as index.html -->
+    </footer>
+    <script src="bookings.js"></script>
+</body>
+</html> 
