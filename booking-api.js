@@ -795,7 +795,7 @@ class TravelAPI {
                     },
                     rating: 4.8,
                     reviews: 140000,
-                    image: 'assets/images/eiffel-tower.jpg',
+                    image: '/assets/images/placeholder.jpg',
                     description: 'Iconic iron lattice tower on the Champ de Mars'
                 },
                 {
@@ -807,7 +807,7 @@ class TravelAPI {
                     },
                     rating: 4.7,
                     reviews: 130000,
-                    image: 'assets/images/colosseum.jpg',
+                    image: '/assets/images/placeholder.jpg',
                     description: 'Ancient amphitheater in the heart of Rome'
                 },
                 {
@@ -819,7 +819,7 @@ class TravelAPI {
                     },
                     rating: 4.9,
                     reviews: 120000,
-                    image: 'assets/images/taj-mahal.jpg',
+                    image: '/assets/images/placeholder.jpg',
                     description: 'Stunning marble mausoleum and UNESCO World Heritage site'
                 },
                 {
@@ -831,7 +831,7 @@ class TravelAPI {
                     },
                     rating: 4.9,
                     reviews: 100000,
-                    image: 'assets/images/machu-picchu.jpg',
+                    image: '/assets/images/placeholder.jpg',
                     description: 'Ancient Incan city set high in the Andes Mountains'
                 }
             ];

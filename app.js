@@ -48,8 +48,10 @@ class App {
             container.innerHTML = attractions.map(attraction => `
                 <div class="attraction-card">
                     <div class="attraction-image">
-                        <img src="${attraction.image}" alt="${attraction.name}" 
-                            onerror="this.src='assets/images/placeholder.jpg'">
+                        <img src="${attraction.image}" 
+                            alt="${attraction.name}" 
+                            onerror="this.src='/assets/images/placeholder.jpg'"
+                            loading="lazy">
                     </div>
                     <div class="attraction-content">
                         <h3>${attraction.name}</h3>
