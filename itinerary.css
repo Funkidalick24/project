@@ -754,4 +754,64 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.itinerary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.itinerary-item:hover {
+    background-color: #f5f5f5;
+}
+
+.itinerary-info {
+    flex: 1;
+}
+
+.itinerary-info h4 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.itinerary-dates {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.itinerary-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-itinerary,
+.delete-itinerary {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.edit-itinerary:hover {
+    background-color: #e3f2fd;
+}
+
+.delete-itinerary:hover {
+    background-color: #ffebee;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 0.9em;
+    margin-top: 0.25rem;
+}
+
+input.error {
+    border-color: #d32f2f;
 } 

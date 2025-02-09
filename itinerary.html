@@ -13,10 +13,10 @@
         <nav class="navbar">
             <div class="logo">TravelBuddy</div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="itinerary.html">Itinerary</a></li>
-                <li><a href="attractions.html">Explore</a></li>
-                <li><a href="bookings.html">Bookings</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="itinerary.html" class="active">Itinerary</a></li>
+                <li><a href="#explore">Explore</a></li>
+                <li><a href="flights.html">Bookings</a></li>
                 <li><a href="#profile">Profile</a></li>
             </ul>
         </nav>
@@ -39,43 +39,10 @@
                         <input type="date" id="trip-start">
                         <input type="date" id="trip-end">
                     </div>
-                    <div class="booking-options">
-                        <div class="flights-section">
-                            <h3>Flight Options</h3>
-                            <div class="flight-search">
-                                <div class="autocomplete-wrapper">
-                                    <input type="text" id="flight-from" placeholder="From (City or Airport)">
-                                    <div class="suggestions-container" id="from-suggestions"></div>
-                                    <input type="hidden" id="flight-from-code">
-                                </div>
-                                <div class="autocomplete-wrapper">
-                                    <input type="text" id="flight-to" placeholder="To (City or Airport)">
-                                    <div class="suggestions-container" id="to-suggestions"></div>
-                                    <input type="hidden" id="flight-to-code">
-                                </div>
-                                <button class="search-button" id="search-flights">Search Flights</button>
-                            </div>
-                            <div id="flight-results" class="results-container"></div>
-                        </div>
-                        
-                        <div class="hotels-section">
-                            <h3>Hotel Options</h3>
-                            <div class="hotel-search">
-                                <input type="text" id="hotel-city" placeholder="City">
-                                <select id="hotel-rating">
-                                    <option value="">Any Rating</option>
-                                    <option value="3">3+ Stars</option>
-                                    <option value="4">4+ Stars</option>
-                                    <option value="5">5 Stars</option>
-                                </select>
-                                <button class="search-button" id="search-hotels">Search Hotels</button>
-                            </div>
-                            <div id="hotel-results" class="results-container"></div>
-                        </div>
-                    </div>
                     <div class="itinerary-days" id="itinerary-days"></div>
                     <button id="share-itinerary" class="secondary-button">Share Itinerary</button>
                     <button id="save-itinerary" class="primary-button">Save Itinerary</button>
+
                 </div>
             </div>
         </section>

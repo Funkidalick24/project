@@ -10,7 +10,16 @@
 </head>
 <body>
     <header>
-        <!-- Same navbar as other pages -->
+        <nav class="navbar">
+            <div class="logo">TravelBuddy</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="itinerary.html">Itinerary</a></li>
+                <li><a href="#explore" class="active">Explore</a></li>
+                <li><a href="flights.html">Bookings</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
@@ -37,6 +46,6 @@
         <!-- Same footer as index.html -->
     </footer>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-    <script src="attractions.js"></script>
+    <script type="module" src="./js/attractions.js"></script>
 </body>
 </html> 

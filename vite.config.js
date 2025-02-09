@@ -21,6 +21,21 @@ export default defineConfig(({ mode }) => {
             'X-TripAdvisor-API-Key': env.VITE_TRIPADVISOR_API_KEY
           }
         },
+        '/amadeus': {
+          target: 'https://test.api.amadeus.com',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/amadeus/, ''),
+          configure: (proxy, _options) => {
+            proxy.on('proxyReq', (proxyReq, req, _res) => {
+              if (req.body) {
+                const bodyData = JSON.stringify(req.body);
+                proxyReq.setHeader('Content-Type', 'application/json');
+                proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+                proxyReq.write(bodyData);
+              }
+            });
+          }
+        },
         '/airport': {
           target: 'https://airport-info.p.rapidapi.com',
           changeOrigin: true,
@@ -39,14 +54,20 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
-          itinerary: resolve(__dirname, 'itinerary.html')
+          itinerary: resolve(__dirname, 'itinerary.html'),
+          flights: resolve(__dirname, 'flights.html'),
+          attractions: resolve(__dirname, 'attractions.html'),
+          bookings: resolve(__dirname, 'bookings.html')
         },
         output: {
           manualChunks: {
-            'vendor': ['booking-api.js'],
-            'app': ['app.js'],
-            'itinerary': ['itinerary.js']
+            vendor: ['./booking-api.js'],
+            app: ['./app.js'],
+            utils: ['./js/utils.js'],
           },
+          external: [
+            'https://maps.googleapis.com/maps/api/js'
+          ],
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name.split('.');
             const extType = info[info.length - 1];
@@ -74,15 +95,23 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ['date-fns']
+      include: [
+        'date-fns',
+        '@googlemaps/js-api-loader'
+      ]
     },
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
         '@assets': resolve(__dirname, './assets'),
         '@styles': resolve(__dirname, './styles'),
-        '@js': resolve(__dirname, './js')
+        '@js': resolve(__dirname, './js'),
+        '@data': resolve(__dirname, './data'),
+        '@components': resolve(__dirname, './components')
       }
+    },
+    define: {
+      'process.env.GOOGLE_MAPS_API_KEY': JSON.stringify(process.env.GOOGLE_MAPS_API_KEY)
     },
     publicDir: 'public',
     css: {

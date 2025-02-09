@@ -5,6 +5,11 @@ class TravelAPI {
         this.TRIPADVISOR_API_HOST = 'api.content.tripadvisor.com';
         this.AIRPORT_API_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
         this.AIRPORT_API_HOST = 'airport-info.p.rapidapi.com';
+        this.USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+        this.AMADEUS_CLIENT_ID = import.meta.env.VITE_AMADEUS_CLIENT_ID;
+        this.AMADEUS_CLIENT_SECRET = import.meta.env.VITE_AMADEUS_CLIENT_SECRET;
+        this.amadeusToken = null;
+        this.amadeusTokenExpiry = null;
     }
 
     // City/Location Search
@@ -642,31 +647,59 @@ class TravelAPI {
 
     // Add this new method for airport search
     async searchAirports(query) {
-        const url = `https://${this.AIRPORT_API_HOST}/airport`;
+        if (query.length < 2) return [];
         
-        const params = new URLSearchParams({
-            iata: query.toUpperCase()
-        });
-
-        const options = {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': this.AIRPORT_API_KEY,
-                'x-rapidapi-host': this.AIRPORT_API_HOST
-            }
-        };
-
         try {
-            const response = await fetch(`${url}?${params}`, options);
-            if (!response.ok) {
-                throw new Error('Airport search failed');
-            }
-            const data = await response.json();
+            const response = await fetch('/data/airports.json');
+            const airports = await response.json();
             
-            return this.formatAirportData(data);
+            const searchTerm = query.toLowerCase();
+            
+            // Group airports by type
+            const groupedAirports = airports
+                .filter(airport => {
+                    if (!airport.ident) return false;
+                    
+                    return (
+                        airport.name.toLowerCase().includes(searchTerm) ||
+                        airport.municipality?.toLowerCase().includes(searchTerm) ||
+                        airport.ident.toLowerCase().includes(searchTerm) ||
+                        airport.iso_country.toLowerCase().includes(searchTerm)
+                    );
+                })
+                .reduce((groups, airport) => {
+                    const type = airport.type || 'Other';
+                    if (!groups[type]) {
+                        groups[type] = [];
+                    }
+                    groups[type].push({
+                        code: airport.ident,
+                        name: airport.name,
+                        type: airport.type,
+                        location: {
+                            city: airport.municipality || 'Unknown',
+                            country: airport.iso_country,
+                            coordinates: {
+                                latitude: airport.latitude_deg,
+                                longitude: airport.longitude_deg
+                            }
+                        },
+                        elevation: airport.elevation_ft,
+                        details: `${airport.name} (${airport.ident})`
+                    });
+                    return groups;
+                }, {});
+
+            // Convert grouped airports to array and limit total results
+            return { 
+                groups: groupedAirports,
+                total: Object.values(groupedAirports)
+                    .reduce((sum, group) => sum + group.length, 0)
+            };
+
         } catch (error) {
             console.error('Error searching airports:', error);
-            throw new Error('Failed to search airports');
+            return [];
         }
     }
 
@@ -784,60 +817,168 @@ class TravelAPI {
 
     async getTopAttractions(limit = 4) {
         try {
-            // For testing, let's use mock data until we get API access
-            return [
-                {
-                    id: '1',
-                    name: 'Eiffel Tower',
-                    location: {
-                        city: 'Paris',
-                        country: 'France'
-                    },
-                    rating: 4.8,
-                    reviews: 140000,
-                    image: '/assets/images/placeholder.jpg',
-                    description: 'Iconic iron lattice tower on the Champ de Mars'
-                },
-                {
-                    id: '2',
-                    name: 'Colosseum',
-                    location: {
-                        city: 'Rome',
-                        country: 'Italy'
-                    },
-                    rating: 4.7,
-                    reviews: 130000,
-                    image: '/assets/images/placeholder.jpg',
-                    description: 'Ancient amphitheater in the heart of Rome'
-                },
-                {
-                    id: '3',
-                    name: 'Taj Mahal',
-                    location: {
-                        city: 'Agra',
-                        country: 'India'
-                    },
-                    rating: 4.9,
-                    reviews: 120000,
-                    image: '/assets/images/placeholder.jpg',
-                    description: 'Stunning marble mausoleum and UNESCO World Heritage site'
-                },
-                {
-                    id: '4',
-                    name: 'Machu Picchu',
-                    location: {
-                        city: 'Cusco Region',
-                        country: 'Peru'
-                    },
-                    rating: 4.9,
-                    reviews: 100000,
-                    image: '/assets/images/placeholder.jpg',
-                    description: 'Ancient Incan city set high in the Andes Mountains'
-                }
-            ];
+            if (this.USE_MOCK_DATA) {
+                const response = await fetch('/data/attractions.json');
+                const mockData = await response.json();
+                return mockData.data.slice(0, limit);
+            }
+
+            // Real API call implementation
+            const url = '/api/v1/location/search';
+            const params = new URLSearchParams({
+                key: this.TRIPADVISOR_API_KEY,
+                category: 'attractions',
+                language: 'en',
+                limit: limit,
+                sort: 'rating'
+            });
+
+            const response = await this.makeRequest(`${url}?${params}`);
+            return response.data || [];
         } catch (error) {
             console.error('Error fetching top attractions:', error);
             return [];
+        }
+    }
+
+    // Get Amadeus access token
+    async getAmadeusToken() {
+        if (this.amadeusToken && this.amadeusTokenExpiry > Date.now()) {
+            return this.amadeusToken;
+        }
+
+        try {
+            const response = await fetch('/amadeus/v1/security/oauth2/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    grant_type: 'client_credentials',
+                    client_id: this.AMADEUS_CLIENT_ID,
+                    client_secret: this.AMADEUS_CLIENT_SECRET
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to get Amadeus token');
+            }
+
+            const data = await response.json();
+            this.amadeusToken = data.access_token;
+            this.amadeusTokenExpiry = Date.now() + (data.expires_in * 1000);
+            return this.amadeusToken;
+        } catch (error) {
+            console.error('Error getting Amadeus token:', error);
+            throw error;
+        }
+    }
+
+    // Search flights
+    async searchFlights(params) {
+        try {
+            const token = await this.getAmadeusToken();
+            const queryParams = new URLSearchParams({
+                originLocationCode: params.origin,
+                destinationLocationCode: params.destination,
+                departureDate: params.departureDate,
+                ...(params.returnDate && { returnDate: params.returnDate }),
+                adults: params.adults || 1,
+                nonStop: params.nonStop || false,
+                max: params.max || 250,
+                currencyCode: params.currency || 'USD'
+            });
+
+            const response = await fetch(`/amadeus/v2/shopping/flight-offers?${queryParams}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Flight search error:', errorData);
+                throw new Error(errorData.errors?.[0]?.detail || 'Flight search failed');
+            }
+
+            const data = await response.json();
+            return {
+                data: data.data.map(offer => ({
+                    id: offer.id,
+                    price: {
+                        amount: offer.price.total,
+                        currency: offer.price.currency
+                    },
+                    itineraries: offer.itineraries.map(itinerary => ({
+                        duration: itinerary.duration,
+                        segments: itinerary.segments.map(segment => ({
+                            departure: {
+                                airport: segment.departure.iataCode,
+                                terminal: segment.departure.terminal,
+                                time: segment.departure.at
+                            },
+                            arrival: {
+                                airport: segment.arrival.iataCode,
+                                terminal: segment.arrival.terminal,
+                                time: segment.arrival.at
+                            },
+                            carrier: segment.carrierCode,
+                            flightNumber: segment.number,
+                            duration: segment.duration,
+                            stops: segment.numberOfStops || 0
+                        }))
+                    })),
+                    validUntil: offer.lastTicketingDate,
+                    numberOfBookableSeats: offer.numberOfBookableSeats,
+                    carriers: data.dictionaries?.carriers || {}
+                }))
+            };
+        } catch (error) {
+            console.error('Error searching flights:', error);
+            throw error;
+        }
+    }
+
+    async bookFlight(flightId) {
+        try {
+            const token = await this.getAmadeusToken();
+            const url = `/amadeus/v1/booking/flight-orders`;
+
+            const payload = {
+                'data': {
+                    'type': 'flight-order',
+                    'flightOffers': [
+                        {
+                            'id': flightId
+                        }
+                    ]
+                }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Flight booking error:', errorData);
+                throw new Error(errorData.errors?.[0]?.detail || 'Flight booking failed');
+            }
+
+            const data = await response.json();
+            return {
+                confirmationCode: data.data.bookingConfirmationCode,
+                flightOrderId: data.data.id
+            };
+        } catch (error) {
+            console.error('Error booking flight:', error);
+            throw error;
         }
     }
 }

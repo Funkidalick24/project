@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "name": "Eiffel Tower",
+      "location": {
+        "city": "Paris",
+        "country": "France"
+      },
+      "rating": 4.8,
+      "reviews": 140000,
+      "image": "/assets/images/placeholder.jpg",
+      "description": "Iconic iron lattice tower on the Champ de Mars"
+    },
+    {
+      "id": "2",
+      "name": "Colosseum",
+      "location": {
+        "city": "Rome",
+        "country": "Italy"
+      },
+      "rating": 4.7,
+      "reviews": 130000,
+      "image": "/assets/images/placeholder.jpg",
+      "description": "Ancient amphitheater in the heart of Rome"
+    },
+    {
+      "id": "3",
+      "name": "Taj Mahal",
+      "location": {
+        "city": "Agra",
+        "country": "India"
+      },
+      "rating": 4.9,
+      "reviews": 120000,
+      "image": "/assets/images/placeholder.jpg",
+      "description": "Stunning marble mausoleum and UNESCO World Heritage site"
+    },
+    {
+      "id": "4",
+      "name": "Machu Picchu",
+      "location": {
+        "city": "Cusco Region",
+        "country": "Peru"
+      },
+      "rating": 4.9,
+      "reviews": 100000,
+      "image": "/assets/images/placeholder.jpg",
+      "description": "Ancient Incan city set high in the Andes Mountains"
+    }
+  ]
+} 
