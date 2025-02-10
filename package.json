@@ -8,7 +8,7 @@
     "build": "vite build --mode production",
     "preview": "vite preview",
     "serve": "vite serve",
-    "clean": "rimraf dist",
+    "clean": "chmod +x node_modules/.bin/rimraf && rimraf dist",
     "prebuild": "npm run clean",
     "start": "vite",
     "lint": "eslint . --ext .js",
