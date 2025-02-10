@@ -842,17 +842,17 @@ class TravelAPI {
             return this.amadeusToken;
         }
 
+        const apiKey = this.AMADEUS_CLIENT_ID;
+        const apiSecret = this.AMADEUS_CLIENT_SECRET;
+        const tokenEndpoint = 'https://test.api.amadeus.com/v1/security/oauth2/token';
+
         try {
-            const response = await fetch('/amadeus/v1/security/oauth2/token', {
+            const response = await fetch(tokenEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: new URLSearchParams({
-                    grant_type: 'client_credentials',
-                    client_id: this.AMADEUS_CLIENT_ID,
-                    client_secret: this.AMADEUS_CLIENT_SECRET
-                })
+                body: `grant_type=client_credentials&client_id=${apiKey}&client_secret=${apiSecret}`
             });
 
             if (!response.ok) {
