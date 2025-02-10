@@ -1,5 +1,4 @@
 import TravelAPI from './booking-api.js';
-
 class App {
     constructor() {
         this.travelAPI = new TravelAPI();
