@@ -1,4 +1,5 @@
 import TravelAPI from './booking-api.js';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 class App {
     constructor() {
