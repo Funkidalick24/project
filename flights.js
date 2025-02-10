@@ -62,39 +62,40 @@ class FlightSearch {
             const airports = await this.travelAPI.searchAirports(input.value);
             this.displayAirportSuggestions(airports, type);
         } catch (error) {
-            console.error('Error searching airports:', error);
+            console.error('Error searching airports:', error.message);
+            suggestionsContainer.innerHTML = `
+                <div class="error-message">
+                    Failed to load airport data. Please try again later.
+                </div>
+            `;
+            suggestionsContainer.classList.add('active');
         }
     }
 
     displayAirportSuggestions(airports, type) {
         const container = document.getElementById(`${type}-suggestions`);
-        if (!airports || !airports.groups || airports.total === 0) {
+        if (!airports || airports.length === 0) {
             container.classList.remove('active');
             return;
         }
 
-        container.innerHTML = Object.entries(airports.groups)
-            .map(([groupType, groupAirports]) => `
-                <div class="suggestion-group">
-                    <div class="suggestion-group-header">
-                        <span class="group-icon">${this.getAirportIcon(groupType)}</span>
-                        <span class="group-name">${this.formatAirportType(groupType)}</span>
-                        <span class="group-count">${groupAirports.length}</span>
-                    </div>
-                    ${groupAirports.map(airport => `
-                        <div class="suggestion-item" data-code="${airport.code}" data-name="${airport.name}">
-                            <div class="suggestion-main">
-                                <span class="airport-name">${airport.name}</span>
-                                <span class="airport-code">${airport.code}</span>
-                            </div>
-                            <div class="suggestion-sub">
-                                <span class="airport-location">${airport.location.city}, ${airport.location.country}</span>
-                                ${airport.elevation ? `<span class="airport-elevation">${airport.elevation}ft</span>` : ''}
-                            </div>
+        container.innerHTML = `
+            <div class="suggestion-group">
+                ${airports.map(airport => `
+                    <div class="suggestion-item" data-code="${airport.code}" data-name="${airport.name}">
+                        <div class="suggestion-main">
+                            <span class="airport-name">${airport.name}</span>
+                            <span class="airport-code">${airport.code}</span>
                         </div>
-                    `).join('')}
-                </div>
-            `).join('');
+                        <div class="suggestion-sub">
+                            <span class="airport-type">${this.getAirportIcon(airport.type)}</span>
+                            <span class="airport-location">${airport.location.city}, ${airport.location.country}</span>
+                            ${airport.elevation ? `<span class="airport-elevation">${airport.elevation}ft</span>` : ''}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
 
         container.classList.add('active');
 
@@ -114,8 +115,8 @@ class FlightSearch {
             });
         });
 
-        // Add keyboard navigation
-        this.setupKeyboardNavigation(container, type);
+        // Setup keyboard navigation for this container
+        this.setupKeyboardNavigation(container, `${type}-display`);
     }
 
     setupKeyboardNavigation(container, inputType) {
@@ -167,8 +168,9 @@ class FlightSearch {
         const destination = document.getElementById('destination');
         const destinationDisplay = document.getElementById('destination-display');
         const departureDate = document.getElementById('departure-date');
+        const passengers = document.getElementById('passengers');
 
-        if (!originDisplay.value || !destinationDisplay.value || !departureDate.value) {
+        if (!originDisplay.value || !destinationDisplay.value || !departureDate.value || !passengers.value) {
             throw new Error('Please fill in all required fields');
         }
 
@@ -181,6 +183,15 @@ class FlightSearch {
         const selectedDate = new Date(departureDate.value);
         if (selectedDate < today) {
             throw new Error('Departure date cannot be in the past');
+        }
+
+        // Validate return date if provided
+        const returnDate = document.getElementById('return-date');
+        if (returnDate.value) {
+            const selectedReturnDate = new Date(returnDate.value);
+            if (selectedReturnDate < selectedDate) {
+                throw new Error('Return date must be after departure date');
+            }
         }
     }
 

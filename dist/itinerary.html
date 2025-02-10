@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
     
     
-  <script type="module" crossorigin src="/assets/js/itinerary-dd80ccb1.js"></script>
+  <script type="module" crossorigin src="/assets/js/itinerary-3e9f2d0e.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/js/styles-ae31c95d.js">
-  <link rel="modulepreload" crossorigin href="/assets/js/vendor-52f6901f.js">
+  <link rel="modulepreload" crossorigin href="/assets/js/vendor-ad137df2.js">
   <link rel="stylesheet" href="/assets/styles/styles-044f38f8.css">
   <link rel="stylesheet" href="/assets/styles/itinerary-13e2d875.css">
 </head>
@@ -33,21 +33,25 @@
             <div class="itinerary-container">
                 <div class="itinerary-sidebar">
                     <button id="new-itinerary" class="primary-button">Create New Itinerary</button>
-                    <div class="saved-itineraries">
-                        <h3>Saved Itineraries</h3>
-                        <ul id="itinerary-list"></ul>
+                    <div id="itinerary-list" class="saved-itineraries">
+                        <!-- Saved itineraries will be inserted here -->
                     </div>
                 </div>
                 <div class="itinerary-main">
                     <div class="itinerary-header">
-                        <input type="text" id="trip-name" placeholder="Trip Name">
-                        <input type="date" id="trip-start">
-                        <input type="date" id="trip-end">
+                        <input type="text" id="trip-name" placeholder="Trip Name" required>
+                        <div class="date-inputs">
+                            <input type="date" id="trip-start" required>
+                            <input type="date" id="trip-end" required>
+                        </div>
                     </div>
-                    <div class="itinerary-days" id="itinerary-days"></div>
-                    <button id="share-itinerary" class="secondary-button">Share Itinerary</button>
-                    <button id="save-itinerary" class="primary-button">Save Itinerary</button>
-
+                    <div id="itinerary-days" class="itinerary-days">
+                        <!-- Days will be inserted here -->
+                    </div>
+                    <div class="itinerary-actions">
+                        <button id="save-itinerary" class="primary-button">Save Itinerary</button>
+                        <button id="share-itinerary" class="secondary-button">Share Itinerary</button>
+                    </div>
                 </div>
             </div>
         </section>

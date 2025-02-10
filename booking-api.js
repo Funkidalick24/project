@@ -5,7 +5,7 @@ class TravelAPI {
         this.TRIPADVISOR_API_HOST = 'api.content.tripadvisor.com';
         this.AIRPORT_API_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
         this.AIRPORT_API_HOST = 'airport-info.p.rapidapi.com';
-        this.USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+        this.USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'false';
         this.AMADEUS_CLIENT_ID = import.meta.env.VITE_AMADEUS_CLIENT_ID;
         this.AMADEUS_CLIENT_SECRET = import.meta.env.VITE_AMADEUS_CLIENT_SECRET;
         this.amadeusToken = null;
@@ -650,13 +650,21 @@ class TravelAPI {
         if (query.length < 2) return [];
         
         try {
-            const response = await fetch('/data/airports.json');
+            // Load the local airport data
+            const response = await fetch('./data/airports.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const airports = await response.json();
-            
+            if (!airports || !Array.isArray(airports.airports)) {
+                throw new Error('Invalid airport data format');
+            }
+
+            // Case-insensitive search
             const searchTerm = query.toLowerCase();
             
-            // Group airports by type
-            const groupedAirports = airports
+            // Filter airports
+            return airports.airports
                 .filter(airport => {
                     if (!airport.ident) return false;
                     
@@ -667,38 +675,25 @@ class TravelAPI {
                         airport.iso_country.toLowerCase().includes(searchTerm)
                     );
                 })
-                .reduce((groups, airport) => {
-                    const type = airport.type || 'Other';
-                    if (!groups[type]) {
-                        groups[type] = [];
-                    }
-                    groups[type].push({
-                        code: airport.ident,
-                        name: airport.name,
-                        type: airport.type,
-                        location: {
-                            city: airport.municipality || 'Unknown',
-                            country: airport.iso_country,
-                            coordinates: {
-                                latitude: airport.latitude_deg,
-                                longitude: airport.longitude_deg
-                            }
-                        },
-                        elevation: airport.elevation_ft,
-                        details: `${airport.name} (${airport.ident})`
-                    });
-                    return groups;
-                }, {});
-
-            // Convert grouped airports to array and limit total results
-            return { 
-                groups: groupedAirports,
-                total: Object.values(groupedAirports)
-                    .reduce((sum, group) => sum + group.length, 0)
-            };
-
+                .map(airport => ({
+                    code: airport.ident,
+                    name: airport.name,
+                    type: airport.type,
+                    location: {
+                        city: airport.municipality || 'Unknown',
+                        country: airport.iso_country,
+                        coordinates: {
+                            latitude: airport.latitude_deg,
+                            longitude: airport.longitude_deg
+                        }
+                    },
+                    elevation: airport.elevation_ft,
+                    details: `${airport.name} (${airport.ident})`
+                }))
+                .slice(0, 10);
         } catch (error) {
-            console.error('Error searching airports:', error);
+            console.error('Error searching airports:', error.message);
+            throw new Error(`Failed to load airport data: ${error.message}`);
             return [];
         }
     }

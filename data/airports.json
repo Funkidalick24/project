@@ -1,1 +1,64 @@
- 
+{
+    "airports": [
+        {
+            "id": "6523",
+            "ident": "00A",
+            "type": "heliport",
+            "name": "Total RF Heliport",
+            "latitude_deg": "40.070985",
+            "longitude_deg": "-74.933689",
+            "elevation_ft": "11",
+            "continent": "NA",
+            "iso_country": "US",
+            "iso_region": "US-PA",
+            "municipality": "Bensalem",
+            "scheduled_service": "no",
+            "gps_code": "K00A",
+            "iata_code": "",
+            "local_code": "00A",
+            "home_link": "",
+            "wikipedia_link": "",
+            "keywords": ""
+        },
+        {
+            "id": "6524",
+            "ident": "00AK",
+            "type": "airport",
+            "name": "Lowell Field",
+            "latitude_deg": "59.947733",
+            "longitude_deg": "-151.692524",
+            "elevation_ft": "450",
+            "continent": "NA",
+            "iso_country": "US",
+            "iso_region": "US-AK",
+            "municipality": "Anchor Point",
+            "scheduled_service": "no",
+            "gps_code": "00AK",
+            "iata_code": "",
+            "local_code": "00AK",
+            "home_link": "",
+            "wikipedia_link": "",
+            "keywords": ""
+        },
+        {
+            "id": "6525",
+            "ident": "00AL",
+            "type": "airport",
+            "name": "Epps Airpark",
+            "latitude_deg": "34.864561",
+            "longitude_deg": "-86.770535",
+            "elevation_ft": "820",
+            "continent": "NA",
+            "iso_country": "US",
+            "iso_region": "US-AL",
+            "municipality": "Harvest",
+            "scheduled_service": "no",
+            "gps_code": "00AL",
+            "iata_code": "",
+            "local_code": "00AL",
+            "home_link": "",
+            "wikipedia_link": "",
+            "keywords": ""
+        }
+    ]
+} 
