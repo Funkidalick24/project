@@ -12,6 +12,38 @@ class TravelAPI {
         this.amadeusTokenExpiry = null;
     }
 
+    async getAmadeusToken() {
+        if (this.amadeusToken && this.amadeusTokenExpiry > Date.now()) {
+            return this.amadeusToken;
+        }
+
+        const apiKey = this.AMADEUS_CLIENT_ID;
+        const apiSecret = this.AMADEUS_CLIENT_SECRET;
+        const tokenEndpoint = 'https://test.api.amadeus.com/v1/security/oauth2/token';
+
+        try {
+            const response = await fetch(tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `grant_type=client_credentials&client_id=${apiKey}&client_secret=${apiSecret}`
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to get Amadeus token');
+            }
+
+            const data = await response.json();
+            this.amadeusToken = data.access_token;
+            this.amadeusTokenExpiry = Date.now() + (data.expires_in * 1000);
+            return this.amadeusToken;
+        } catch (error) {
+            console.error('Error getting Amadeus token:', error);
+            throw error;
+        }
+    }
+
     // City/Location Search
     async getCitySuggestions(searchQuery, options = {}) {
         if (!searchQuery && !options.latLong) {
@@ -836,55 +868,12 @@ class TravelAPI {
         }
     }
 
-    // Get Amadeus access token
-    async getAmadeusToken() {
-        if (this.amadeusToken && this.amadeusTokenExpiry > Date.now()) {
-            return this.amadeusToken;
-        }
-
-        const apiKey = this.AMADEUS_CLIENT_ID;
-        const apiSecret = this.AMADEUS_CLIENT_SECRET;
-        const tokenEndpoint = 'https://test.api.amadeus.com/v1/security/oauth2/token';
-
-        try {
-            const response = await fetch(tokenEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `grant_type=client_credentials&client_id=${apiKey}&client_secret=${apiSecret}`
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to get Amadeus token');
-            }
-
-            const data = await response.json();
-            this.amadeusToken = data.access_token;
-            this.amadeusTokenExpiry = Date.now() + (data.expires_in * 1000);
-            return this.amadeusToken;
-        } catch (error) {
-            console.error('Error getting Amadeus token:', error);
-            throw error;
-        }
-    }
-
     // Search flights
-    async searchFlights(params) {
+    async searchFlights(originCode, destinationCode, departureDate) {
         try {
             const token = await this.getAmadeusToken();
-            const queryParams = new URLSearchParams({
-                originLocationCode: params.origin,
-                destinationLocationCode: params.destination,
-                departureDate: params.departureDate,
-                ...(params.returnDate && { returnDate: params.returnDate }),
-                adults: params.adults || 1,
-                nonStop: params.nonStop || false,
-                max: params.max || 250,
-                currencyCode: params.currency || 'USD'
-            });
-
-            const response = await fetch(`/amadeus/v2/shopping/flight-offers?${queryParams}`, {
+            const url = `/amadeus/v2/shopping/flight-offers?originLocationCode=${originCode}&destinationLocationCode=${destinationCode}&departureDate=${departureDate}&adults=1`;
+            const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
