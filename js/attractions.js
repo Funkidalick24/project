@@ -128,4 +128,44 @@ class AttractionsExplorer {
 
 document.addEventListener('DOMContentLoaded', () => {
     new AttractionsExplorer();
-}); 
+});
+
+async function fetchAttractionsAndSendData() {
+    try {
+        const apiKey = import.meta.env.VITE_TRIPADVISOR_API_KEY;
+        const url = `/api/v1/location/search?key=${apiKey}&category=attractions&language=en&limit=10`; // Adjust URL as needed
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Send data to server-side endpoint
+        await sendDataToServer(data);
+    } catch (error) {
+        console.error('Error fetching or sending attractions data:', error);
+    }
+}
+
+async function sendDataToServer(data) {
+    try {
+        const response = await fetch('/api/save-attractions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log('Attractions data sent to server successfully.');
+    } catch (error) {
+        console.error('Error sending attractions data to server:', error);
+    }
+}
+
+// Call the function to fetch and send data
+fetchAttractionsAndSendData(); 
