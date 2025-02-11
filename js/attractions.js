@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchAttractionsAndSendData() {
     try {
         const apiKey = import.meta.env.VITE_TRIPADVISOR_API_KEY;
-        const url = `/api/v1/location/search?key=${apiKey}&category=attractions&language=en&limit=10`; // Adjust URL as needed
+        const url = `https://api.content.tripadvisor.com/api/v1/location/search?key=${apiKey}&category=attractions&language=en&limit=10`; // Adjust URL as needed
 
         const response = await fetch(url);
         if (!response.ok) {
